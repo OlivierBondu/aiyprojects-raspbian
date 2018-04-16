@@ -20,7 +20,7 @@ import aiy._drivers._status_ui
 
 # GPIO definitions (BCM)
 _GPIO_BUTTON = 23
-_GPIO_LED = 25
+_GPIO_LED = 25 
 
 # Import LED class to expose the LED constants.
 LED = aiy._drivers._led.LED

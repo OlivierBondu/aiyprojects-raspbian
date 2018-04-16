@@ -18,19 +18,30 @@
 import aiy.audio
 import aiy.cloudspeech
 import aiy.voicehat
+import RPi.GPIO as GPIO
 
 
 def main():
     recognizer = aiy.cloudspeech.get_recognizer()
     recognizer.expect_phrase('turn off the light')
     recognizer.expect_phrase('turn on the light')
+    recognizer.expect_phrase('goodbye')
     recognizer.expect_phrase('blink')
+    recognizer.expect_phrase('double blink')
+    recognizer.expect_phrase('Beacon')
+    recognizer.expect_phrase('Beacon dark')
+    recognizer.expect_phrase('decay')
+    recognizer.expect_phrase('slow')
+    recognizer.expect_phrase('quick')
+    recognizer.expect_phrase('pulse slow')
+    recognizer.expect_phrase('pulse quick')
 
     button = aiy.voicehat.get_button()
     led = aiy.voicehat.get_led()
     aiy.audio.get_recorder().start()
 
     while True:
+        print('LED state: {}'.format(led.state))
         print('Press the button and speak')
         button.wait_for_press()
         print('Listening...')
@@ -43,6 +54,18 @@ def main():
                 led.set_state(aiy.voicehat.LED.ON)
             elif 'turn off the light' in text:
                 led.set_state(aiy.voicehat.LED.OFF)
+            elif 'Beacon dark' in text:
+                led.set_state(aiy.voicehat.LED.BEACON_DARK)
+            elif 'Beacon' in text:
+                led.set_state(aiy.voicehat.LED.BEACON)
+            elif 'decay' in text:
+                led.set_state(aiy.voicehat.LED.DECAY)
+            elif ('pulse slow' or 'slow') in text:
+                led.set_state(aiy.voicehat.LED.PULSE_SLOW)
+            elif ('pulse quick' or 'quick') in text:
+                led.set_state(aiy.voicehat.LED.PULSE_QUICK)
+            elif 'double blink' in text:
+                led.set_state(aiy.voicehat.LED.BLINK_3)
             elif 'blink' in text:
                 led.set_state(aiy.voicehat.LED.BLINK)
             elif 'goodbye' in text:
